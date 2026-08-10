@@ -1,0 +1,38 @@
+# SPA React — toutes les URLs renvoient vers index.html
+# Nécessaire pour que React Router fonctionne côté serveur Apache (LWS cPanel)
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Ne pas réécrire les fichiers et dossiers existants (assets, images...)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Tout le reste → index.html (React Router prend le relais)
+    RewriteRule ^ index.html [QSA,L]
+</IfModule>
+
+# Sécurité — bloquer l'accès aux fichiers sensibles
+<FilesMatch "^(\.env|\.gitignore|package\.json|package-lock\.json|vite\.config\.*)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Cache agressif pour les assets (hash dans le nom = changement auto)
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/html                 "access plus 0 seconds"
+    ExpiresByType application/javascript    "access plus 1 year"
+    ExpiresByType text/css                  "access plus 1 year"
+    ExpiresByType image/png                 "access plus 1 year"
+    ExpiresByType image/jpeg                "access plus 1 year"
+    ExpiresByType image/svg+xml             "access plus 1 year"
+    ExpiresByType image/x-icon              "access plus 1 year"
+    ExpiresByType application/manifest+json "access plus 1 week"
+</IfModule>
+
+# Compression gzip
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json
+</IfModule>

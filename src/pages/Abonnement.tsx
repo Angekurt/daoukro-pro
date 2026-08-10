@@ -275,7 +275,7 @@ export default function Abonnement() {
 
       {/* Note de bas de page */}
       <p className="text-xs text-text-muted text-center mt-5 leading-relaxed">
-        Les prix sont fixés par la mairie de Daoukro et peuvent évoluer.
+        Les tarifs sont fixés par AK Dev et peuvent évoluer selon le contexte local.
         Le renouvellement est manuel — aucun prélèvement automatique.
       </p>
 
