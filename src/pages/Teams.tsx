@@ -54,6 +54,8 @@ function DetailEquipe({ team, onRetour, onMaj }: { team: TeamDetail; onRetour: (
   const [enRetrait,   setEnRetrait]   = useState(false)
   const [quitterModal, setQuitterModal] = useState(false)
   const [enQuitter,   setEnQuitter]   = useState(false)
+  const [supprimerModal, setSupprimerModal] = useState(false)
+  const [enSupprimer,    setEnSupprimer]    = useState(false)
 
   async function inviter(e: FormEvent) {
     e.preventDefault()
@@ -88,6 +90,15 @@ function DetailEquipe({ team, onRetour, onMaj }: { team: TeamDetail; onRetour: (
     } finally { setEnQuitter(false) }
   }
 
+  async function supprimerEquipe() {
+    setEnSupprimer(true)
+    try {
+      await api.delete(`/teams/${team.id}`)
+      setSupprimerModal(false)
+      onRetour()
+    } finally { setEnSupprimer(false) }
+  }
+
   return (
     <div>
       <div className="flex items-center gap-2 text-xs text-text-muted mb-5">
@@ -107,10 +118,15 @@ function DetailEquipe({ team, onRetour, onMaj }: { team: TeamDetail; onRetour: (
             {ROLE_LABEL[team.role]}
           </span>
         </div>
-        {!team.est_proprietaire && (
+        {!team.est_proprietaire ? (
           <button onClick={() => setQuitterModal(true)}
             className="mt-4 text-xs text-red-500 hover:underline">
             Quitter cette équipe
+          </button>
+        ) : (
+          <button onClick={() => setSupprimerModal(true)}
+            className="mt-4 text-xs text-red-500 hover:underline">
+            Supprimer cette équipe
           </button>
         )}
       </div>
@@ -221,6 +237,23 @@ function DetailEquipe({ team, onRetour, onMaj }: { team: TeamDetail; onRetour: (
           <button onClick={quitterEquipe} disabled={enQuitter}
             className="flex-1 py-2.5 rounded-xl bg-red-600 text-white text-sm font-semibold disabled:opacity-60">
             {enQuitter ? 'Départ…' : 'Quitter'}
+          </button>
+        </div>
+      </Modal>
+
+      {/* Modale supprimer équipe */}
+      <Modal ouvert={supprimerModal} onFermer={() => setSupprimerModal(false)} titre="Supprimer l'équipe">
+        <p className="text-sm text-text-secondary mb-5">
+          Supprimer définitivement <strong>{team.nom}</strong> ? Tous les membres perdront leur accès. Cette action est irréversible.
+        </p>
+        <div className="flex gap-3">
+          <button onClick={() => setSupprimerModal(false)} disabled={enSupprimer}
+            className="flex-1 py-2.5 rounded-xl border border-border text-sm font-medium text-text-secondary disabled:opacity-50">
+            Annuler
+          </button>
+          <button onClick={supprimerEquipe} disabled={enSupprimer}
+            className="flex-1 py-2.5 rounded-xl bg-red-600 text-white text-sm font-semibold disabled:opacity-60">
+            {enSupprimer ? 'Suppression…' : 'Supprimer'}
           </button>
         </div>
       </Modal>

@@ -81,8 +81,10 @@ export default function Layout({ children }: { children: ReactNode }) {
           {/* Nav desktop */}
           {utilisateur && (
             <nav className="flex items-center gap-1">
-              <NavLinkDesktop href="/tableau-de-bord" actif={surDashboard && !surProfil} label="Tableau de bord" />
-              <NavLinkDesktop href="/tableau-de-bord?vue=kpi" actif={false} label="Statistiques" />
+              <NavLinkDesktop href="/tableau-de-bord"      actif={surDashboard && !surProfil} label="Tableau de bord" />
+              <NavLinkDesktop href="/tableau-de-bord?vue=kpi" actif={false}                  label="Statistiques" />
+              <NavLinkDesktop href="/equipes"              actif={surEquipes}                 label="Équipes" />
+              <NavLinkDesktop href="/abonnement"           actif={path === '/abonnement'}     label="Abonnement" />
               <div className="w-px h-5 bg-white/20 mx-2" />
               {/* Avatar / Profil */}
               <Link
