@@ -6,8 +6,9 @@ import Login           from './pages/Login'
 import PageIntrouvable from './pages/PageIntrouvable'
 
 // Pages protégées
-import Dashboard         from './pages/Dashboard'
-import Profil            from './pages/Profil'
+import Dashboard from './pages/Dashboard'
+import Profil    from './pages/Profil'
+import Teams     from './pages/Teams'
 
 // Création de fiches
 import NouvelArtisan       from './pages/NouvelArtisan'
@@ -50,6 +51,9 @@ export default function App() {
 
       {/* ── Profil ── */}
       <Route path="/profil"          element={<P><Profil /></P>} />
+
+      {/* ── Teams ── */}
+      <Route path="/equipes" element={<P><Teams /></P>} />
 
       {/* ── Détail d'une fiche ── */}
       <Route path="/fiche/:type/:id" element={<P><DetailFiche /></P>} />
