@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Layout from '../components/Layout'
 import { useAuth } from '../context/AuthContext'
 import { Champ, ChampTextarea, BoutonSoumettre } from '../components/FormChamp'
@@ -176,6 +176,13 @@ export default function Profil() {
       {/* ── Zone compte ── */}
       <div className="bg-white border border-border rounded-2xl p-5">
         <h2 className="text-sm font-semibold text-text-primary mb-3">Compte</h2>
+        <Link to="/abonnement"
+          className="flex items-center justify-between w-full py-2.5 px-3 rounded-xl border border-border text-sm font-medium text-text-secondary hover:bg-surface-alt transition-colors mb-2">
+          <span>Gérer mon abonnement</span>
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
+          </svg>
+        </Link>
         <button type="button" onClick={onDeconnecter}
           className="w-full border border-red-200 text-red-600 font-medium py-2.5 rounded-xl text-sm hover:bg-red-50 transition-colors">
           Se déconnecter
