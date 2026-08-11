@@ -140,6 +140,8 @@ export default function Abonnement() {
   const [erreur,        setErreur]        = useState<string | null>(null)
   const [verification,  setVerification]  = useState(false)
   const [msgVerif,      setMsgVerif]      = useState<string | null>(null)
+  const [annulation,    setAnnulation]    = useState(false)
+  const [confirmAnnul,  setConfirmAnnul]  = useState(false)
 
   useEffect(() => {
     Promise.all([
@@ -166,6 +168,20 @@ export default function Abonnement() {
       setErreur(err.response?.data?.message ?? 'Erreur lors de l\'initiation du paiement.')
     } finally {
       setEnCours(false)
+    }
+  }
+
+  async function annulerAbonnement() {
+    setAnnulation(true)
+    try {
+      await api.post('/plans/annuler')
+      setConfirmAnnul(false)
+      setMsgVerif('Abonnement annulé. Votre plan reste actif jusqu\'à sa date d\'expiration.')
+      api.get('/mon-plan').then(({ data }) => setMonPlan(data.data))
+    } catch {
+      setMsgVerif('Impossible d\'annuler. Réessayez ou contactez le support.')
+    } finally {
+      setAnnulation(false)
     }
   }
 
@@ -254,14 +270,22 @@ export default function Abonnement() {
 
           {/* Vérification paiement en attente */}
           {msgVerif ? (
-            <p className={`text-sm mt-3 ${msgVerif.includes('confirmé') ? 'text-green-700' : 'text-amber-800'}`}>
+            <p className={`text-sm mt-3 ${msgVerif.includes('confirmé') || msgVerif.includes('actif') ? 'text-green-700' : 'text-amber-800'}`}>
               {msgVerif}
             </p>
           ) : (
-            <button onClick={verifierPaiement} disabled={verification}
-              className="mt-3 text-xs text-primary font-medium hover:underline disabled:opacity-50">
-              {verification ? 'Vérification…' : 'Vérifier un paiement en attente'}
-            </button>
+            <div className="flex items-center justify-between mt-3">
+              <button onClick={verifierPaiement} disabled={verification}
+                className="text-xs text-primary font-medium hover:underline disabled:opacity-50">
+                {verification ? 'Vérification…' : 'Vérifier un paiement en attente'}
+              </button>
+              {planActuelId !== 'free' && (
+                <button onClick={() => setConfirmAnnul(true)}
+                  className="text-xs text-red-500 font-medium hover:underline">
+                  Annuler l'abonnement
+                </button>
+              )}
+            </div>
           )}
         </div>
       )}
@@ -350,6 +374,44 @@ export default function Abonnement() {
           )}
         </div>
       </Modal>
+      {/* Modale confirmation annulation */}
+      <Modal
+        ouvert={confirmAnnul}
+        onFermer={() => setConfirmAnnul(false)}
+        titre="Annuler l'abonnement"
+      >
+        <div className="space-y-4">
+          <p className="text-sm text-text-secondary">
+            Votre abonnement restera actif jusqu'à sa date d'expiration. Aucun remboursement ne sera effectué.
+          </p>
+          {monPlan?.plan_expire_at && (
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
+              <p className="text-xs text-amber-800">
+                Votre plan reste actif jusqu'au{' '}
+                <strong>{new Date(monPlan.plan_expire_at).toLocaleDateString('fr', {
+                  day: 'numeric', month: 'long', year: 'numeric'
+                })}</strong>
+              </p>
+            </div>
+          )}
+          <div className="flex gap-3">
+            <button
+              onClick={() => setConfirmAnnul(false)}
+              className="flex-1 py-2.5 rounded-xl border border-border text-sm font-medium text-text-secondary hover:bg-surface-alt"
+            >
+              Garder mon abonnement
+            </button>
+            <button
+              onClick={annulerAbonnement}
+              disabled={annulation}
+              className="flex-1 py-2.5 rounded-xl bg-red-600 text-white text-sm font-semibold hover:bg-red-700 disabled:opacity-60"
+            >
+              {annulation ? 'Annulation…' : 'Confirmer l\'annulation'}
+            </button>
+          </div>
+        </div>
+      </Modal>
+
     </Layout>
   )
 }
