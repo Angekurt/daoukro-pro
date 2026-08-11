@@ -1,8 +1,10 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Layout from '../components/Layout'
+import Modal from '../components/Modal'
 import { useAuth } from '../context/AuthContext'
 import { Champ, ChampTextarea, BoutonSoumettre } from '../components/FormChamp'
+import { api } from '../lib/api'
 
 // ── Indicateur de complétion ──────────────────────────────────────────────────
 
@@ -51,9 +53,12 @@ export default function Profil() {
   const [nom,       setNom]       = useState(utilisateur?.nom       ?? '')
   const [telephone, setTelephone] = useState(utilisateur?.telephone ?? '')
   const [bio,       setBio]       = useState(utilisateur?.bio       ?? '')
-  const [enCours,   setEnCours]   = useState(false)
-  const [succes,    setSucces]    = useState(false)
-  const [erreur,    setErreur]    = useState<string | null>(null)
+  const [enCours,        setEnCours]        = useState(false)
+  const [succes,         setSucces]         = useState(false)
+  const [erreur,         setErreur]         = useState<string | null>(null)
+  const [confirmSuppr,   setConfirmSuppr]   = useState(false)
+  const [suppression,    setSuppression]    = useState(false)
+  const [motDePasseConf, setMotDePasseConf] = useState('')
 
   if (!utilisateur) return null
 
@@ -84,6 +89,20 @@ export default function Profil() {
   function onDeconnecter() {
     deconnecter()
     navigate('/', { replace: true })
+  }
+
+  async function supprimerCompte() {
+    setSuppression(true)
+    try {
+      await api.delete('/auth/compte')
+      deconnecter()
+      navigate('/', { replace: true })
+    } catch {
+      setErreur('Impossible de supprimer le compte. Contactez le support.')
+      setConfirmSuppr(false)
+    } finally {
+      setSuppression(false)
+    }
   }
 
   return (
@@ -187,7 +206,45 @@ export default function Profil() {
           className="w-full border border-red-200 text-red-600 font-medium py-2.5 rounded-xl text-sm hover:bg-red-50 transition-colors">
           Se déconnecter
         </button>
+        <button type="button" onClick={() => setConfirmSuppr(true)}
+          className="w-full mt-2 text-xs text-text-muted hover:text-red-500 transition-colors py-1">
+          Supprimer mon compte
+        </button>
       </div>
+
+      {/* ── Modale suppression compte ── */}
+      <Modal ouvert={confirmSuppr} onFermer={() => { setConfirmSuppr(false); setMotDePasseConf('') }} titre="Supprimer mon compte">
+        <div className="space-y-4">
+          <div className="bg-red-50 border border-red-200 rounded-xl p-3">
+            <p className="text-sm text-red-800 font-medium">Cette action est irréversible.</p>
+            <p className="text-xs text-red-700 mt-1">
+              Toutes vos fiches, données et abonnement seront définitivement supprimés.
+              Aucun remboursement ne sera effectué.
+            </p>
+          </div>
+          <Champ
+            label="Tapez SUPPRIMER pour confirmer"
+            value={motDePasseConf}
+            onChange={setMotDePasseConf}
+            placeholder="SUPPRIMER"
+          />
+          <div className="flex gap-3">
+            <button
+              onClick={() => { setConfirmSuppr(false); setMotDePasseConf('') }}
+              className="flex-1 py-2.5 rounded-xl border border-border text-sm font-medium text-text-secondary hover:bg-surface-alt"
+            >
+              Annuler
+            </button>
+            <button
+              onClick={supprimerCompte}
+              disabled={suppression || motDePasseConf !== 'SUPPRIMER'}
+              className="flex-1 py-2.5 rounded-xl bg-red-600 text-white text-sm font-semibold hover:bg-red-700 disabled:opacity-40"
+            >
+              {suppression ? 'Suppression…' : 'Supprimer définitivement'}
+            </button>
+          </div>
+        </div>
+      </Modal>
     </Layout>
   )
 }
