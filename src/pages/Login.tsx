@@ -100,11 +100,11 @@ export default function Login() {
          style={{ background: 'linear-gradient(145deg,#0c3810,#145217,#1a6b1e)' }}>
 
       {/* Image de fond Daoukro avec opacité réduite */}
-      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10"
+      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-25"
            style={{ backgroundImage: "url('/bg-daoukro.jpg')" }} />
 
       {/* Formes décoratives */}
-      <div className="absolute top-0 right-0 w-80 h-80 rounded-full opacity-10"
+      <div className="absolute top-0 right-0 w-80 h-80 rounded-full opacity-5"
            style={{ background: '#ef8a0c', filter: 'blur(80px)' }} />
       <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full opacity-10"
            style={{ background: 'white', filter: 'blur(80px)' }} />
