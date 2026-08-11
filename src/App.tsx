@@ -9,7 +9,8 @@ import PageIntrouvable from './pages/PageIntrouvable'
 import Dashboard   from './pages/Dashboard'
 import Profil      from './pages/Profil'
 import Teams       from './pages/Teams'
-import Abonnement  from './pages/Abonnement'
+import Abonnement      from './pages/Abonnement'
+import PaiementRetour  from './pages/PaiementRetour'
 
 // Création de fiches
 import NouvelArtisan       from './pages/NouvelArtisan'
@@ -57,7 +58,8 @@ export default function App() {
       <Route path="/equipes"    element={<P><Teams /></P>} />
 
       {/* ── Abonnement ── */}
-      <Route path="/abonnement" element={<P><Abonnement /></P>} />
+      <Route path="/abonnement"       element={<P><Abonnement /></P>} />
+      <Route path="/paiement/retour"  element={<P><PaiementRetour /></P>} />
 
       {/* ── Détail d'une fiche ── */}
       <Route path="/fiche/:type/:id" element={<P><DetailFiche /></P>} />

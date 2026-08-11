@@ -113,7 +113,7 @@ export default function NouvelleHebergement() {
       </form>
       {apercu && (
         <ApercuFiche
-          donnees={{ nom, sousTexte: type, description: desc, telephone, adresse, photo, galerie,
+          donnees={{ nom, sousTexte: type, description: description, telephone, adresse, photo, galerie,
             extra: [
               ...(prixMin ? [{ label: 'À partir de', valeur: `${Number(prixMin).toLocaleString()} F/nuit` }] : []),
               ...(prixMax ? [{ label: 'Jusqu\'à',    valeur: `${Number(prixMax).toLocaleString()} F/nuit` }] : []),

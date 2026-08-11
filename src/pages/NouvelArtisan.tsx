@@ -106,7 +106,7 @@ export default function NouvelArtisan() {
 
       {apercu && (
         <ApercuFiche
-          donnees={{ nom, sousTexte: metier, description: desc, telephone, adresse, photo, galerie }}
+          donnees={{ nom, sousTexte: metier, description: description, telephone, adresse, photo, galerie }}
           onFermer={() => setApercu(false)}
         />
       )}

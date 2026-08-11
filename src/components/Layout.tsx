@@ -39,15 +39,6 @@ function IcoStats({ active }: { active: boolean }) {
   )
 }
 
-// ── Config navigation ─────────────────────────────────────────────────────────
-
-const NAV_ITEMS = [
-  { label: 'Accueil',   href: '/tableau-de-bord', icon: IcoDashboard },
-  { label: 'Stats',     href: '/tableau-de-bord?vue=kpi', icon: IcoStats },
-  // Le bouton central "+" est géré séparément
-  { label: 'Profil',    href: '/profil',           icon: IcoProfil },
-]
-
 // ── Layout ────────────────────────────────────────────────────────────────────
 
 export default function Layout({ children }: { children: ReactNode }) {

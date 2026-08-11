@@ -152,7 +152,7 @@ export default function NouvelleAnnonce() {
       </form>
       {apercu && (
         <ApercuFiche
-          donnees={{ nom: titre, sousTexte: type, description: desc, telephone, adresse: lieu, photo, galerie,
+          donnees={{ nom: titre, sousTexte: type, description: description, telephone, adresse: lieu, photo, galerie,
             extra: [
               ...(dateDebut ? [{ label: 'Début', valeur: dateDebut }] : []),
               ...(dateFin   ? [{ label: 'Fin',   valeur: dateFin   }] : []),
