@@ -6,9 +6,27 @@ import { api, setStoredToken } from '../lib/api'
 
 type Mode = 'choix' | 'connexion' | 'inscription'
 
+// ── PWA Install Hook ──────────────────────────────────────────────────────────
+function usePwaInstall() {
+  const [prompt, setPrompt] = useState<any>(null)
+  useEffect(() => {
+    const handler = (e: any) => { e.preventDefault(); setPrompt(e) }
+    window.addEventListener('beforeinstallprompt', handler)
+    return () => window.removeEventListener('beforeinstallprompt', handler)
+  }, [])
+  const install = async () => {
+    if (!prompt) return
+    prompt.prompt()
+    await prompt.userChoice
+    setPrompt(null)
+  }
+  return { canInstall: !!prompt, install }
+}
+
 export default function Login() {
   const { utilisateur, chargement, erreur, connecterAvecGoogle, rafraichirProfil } = useAuth()
   const navigate = useNavigate()
+  const { canInstall, install } = usePwaInstall()
 
   const [mode,      setMode]      = useState<Mode>('choix')
   const [nom,       setNom]       = useState('')
@@ -77,11 +95,39 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-surface px-4">
-      <div className="w-full max-w-sm bg-white border border-border rounded-2xl p-8">
+    /* ── Fond : image de Daoukro avec overlay ── */
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 relative overflow-hidden"
+         style={{ background: 'linear-gradient(145deg,#0c3810,#145217,#1a6b1e)' }}>
+
+      {/* Image de fond Daoukro avec opacité réduite */}
+      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10"
+           style={{ backgroundImage: "url('/bg-daoukro.jpg')" }} />
+
+      {/* Formes décoratives */}
+      <div className="absolute top-0 right-0 w-80 h-80 rounded-full opacity-10"
+           style={{ background: '#ef8a0c', filter: 'blur(80px)' }} />
+      <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full opacity-10"
+           style={{ background: 'white', filter: 'blur(80px)' }} />
+
+      {/* Bouton PWA Install */}
+      {canInstall && (
+        <div className="relative z-10 mb-4 w-full max-w-sm">
+          <button onClick={install}
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-white text-sm font-bold transition-all hover:-translate-y-0.5 shadow-xl"
+            style={{ background: '#ef8a0c', boxShadow: '0 8px 20px rgba(239,138,12,0.4)' }}>
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            Installer l'app sur cet appareil
+          </button>
+          <p className="text-white/40 text-xs text-center mt-1.5">Accès rapide depuis votre écran d'accueil</p>
+        </div>
+      )}
+
+      <div className="relative z-10 w-full max-w-sm bg-white border border-gray-100 rounded-2xl p-8 shadow-2xl">
         {/* En-tête */}
         <div className="text-center mb-6">
-          <img src="/icon.png" alt="Daoukro Digital" className="w-16 h-16 rounded-xl mx-auto mb-4 object-cover" />
+          <img src="/icon.png" alt="Daoukro Digital" className="w-16 h-16 rounded-xl mx-auto mb-4 object-cover shadow-md" />
           <h1 className="text-xl font-bold text-text-primary mb-1">Daoukro Pro</h1>
           <p className="text-sm text-text-secondary">
             {mode === 'inscription'
@@ -181,6 +227,12 @@ export default function Login() {
           </p>
         )}
       </div>
+
+      {/* Footer discret */}
+      <p className="relative z-10 mt-5 text-white/25 text-xs text-center">
+        © 2026 Daoukro Digital ·{' '}
+        <a href="https://akdev.tech" target="_blank" className="hover:text-white/50 transition-colors" style={{ color: 'rgba(239,138,12,0.5)' }}>AKDEV</a>
+      </p>
     </div>
   )
 }
