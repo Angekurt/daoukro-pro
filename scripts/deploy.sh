@@ -17,19 +17,13 @@
 set -e
 
 echo "== 1. Récupération du code =="
-git pull origin main
+git fetch origin && git reset --hard origin/main
 
-echo "== 2. Dépendances npm =="
-npm ci --prefer-offline
+echo "== 2. Déploiement des fichiers dist vers la racine =="
+cp -rf dist/* .
+chmod -R 755 .
 
-echo "== 3. Build production =="
-npm run build
-# Génère le dossier dist/ avec tous les assets optimisés
-
-echo "== 4. Permissions dist/ =="
-chmod -R 755 dist/
-
-echo "== Terminé. La PWA est à jour. =="
+echo "== Terminé. La PWA Daoukro Pro est à jour. =="
 
 # ─────────────────────────────────────────────────────────────────────────────
 # ALTERNATIVE SANS NODE.JS SUR LE SERVEUR
