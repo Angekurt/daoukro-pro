@@ -78,8 +78,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
       sauvegarderUtilisateur(u)
       return true
-    } catch {
-      setErreur('Connexion impossible pour le moment. Réessayez.')
+    } catch (err: any) {
+      const msg = err?.response?.data?.message ?? (err?.message ? `Erreur: ${err.message}` : 'Connexion impossible pour le moment. Réessayez.')
+      setErreur(msg)
       return false
     } finally {
       setChargement(false)

@@ -231,7 +231,7 @@ export default function Login() {
       {/* Footer discret */}
       <p className="relative z-10 mt-5 text-white/25 text-xs text-center">
         © 2026 Daoukro Digital ·{' '}
-        <a href="https://akdev.tech" target="_blank" className="hover:text-white/50 transition-colors" style={{ color: 'rgba(239,138,12,0.5)' }}>AKDEV</a>
+        <a href="https://akdev.ci" target="_blank" className="hover:text-white/50 transition-colors" style={{ color: 'rgba(239,138,12,0.5)' }}>AKDEV</a>
       </p>
     </div>
   )

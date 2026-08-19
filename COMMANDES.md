@@ -22,6 +22,6 @@ cd ~/public_html/daoukro-pro && git pull origin main
 
 | Plateforme   | URL                                     |
 |--------------|-----------------------------------------|
-| PWA          | https://daoukro-pro.akdev.tech          |
-| Admin        | https://api-daoukro.akdev.tech/admin    |
-| Landing page | https://daoukro.akdev.tech              |
+| PWA          | https://daoukro-pro.akdev.ci            |
+| Admin        | https://api-daoukro.akdev.ci/admin      |
+| Landing page | https://daoukro.akdev.ci                |

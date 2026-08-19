@@ -25,7 +25,7 @@ export default defineConfig({
         // Cache stratégie réseau-first pour les appels API
         runtimeCaching: [
           {
-            urlPattern: /^https:\/\/api-daoukro\.akdev\.tech\/api/,
+            urlPattern: /^https:\/\/api-daoukro\.akdev\.ci\/api/,
             handler: 'NetworkFirst',
             options: {
               cacheName: 'api-cache',

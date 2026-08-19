@@ -21,7 +21,7 @@ scp -P $SSH_PORT -r "$LOCAL_DIR*" "${SSH_USER}@${SSH_HOST}:${REMOTE_DIR}/"
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host "Deploiement reussi !" -ForegroundColor Green
-    Write-Host "Site : https://daoukro-pro.akdev.tech" -ForegroundColor Green
+    Write-Host "Site : https://daoukro-pro.akdev.ci" -ForegroundColor Green
 } else {
     Write-Host "Echec du deploiement" -ForegroundColor Red
 }
