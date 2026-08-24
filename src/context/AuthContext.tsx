@@ -79,7 +79,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       sauvegarderUtilisateur(u)
       return true
     } catch (err: any) {
-      const msg = err?.response?.data?.message ?? (err?.message ? `Erreur: ${err.message}` : 'Connexion impossible pour le moment. Réessayez.')
+      let msg = 'Connexion impossible pour le moment. Réessayez.'
+      if (err?.response?.data?.message) {
+        msg = err.response.data.message
+      } else if (err?.message === 'Network Error') {
+        msg = 'Erreur réseau : impossible de joindre le serveur API. Vérifiez votre connexion.'
+      } else if (err?.message) {
+        msg = `Erreur: ${err.message}`
+      }
       setErreur(msg)
       return false
     } finally {
